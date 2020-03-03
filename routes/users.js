@@ -1,12 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const post = require('../models/User');
+const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-//router.post('')
+router.post('/', function(req, res, next) {
+  console.log(req.body);
+  const user = new User({
+    userId : req.body.userId,
+    userName: req.body.userName,
+    userPassword: req.body.userPassword,
+    isAdmin: req.body.isAdmin,
+    isPrivate: req.body.isPrivate,
+  });
+
+  user.save()
+  .then(data => {
+    res.json(data);
+  }).catch(err => {
+    res.json({err});
+  });
+
+});
 
 module.exports = router;
