@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     userId: {
-        type: BigInt,
+        type: Number,
         required: true
     },
     userName: {
@@ -13,7 +13,14 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-
+    isAdmin: {
+        type: Boolean,
+        required: true
+    },
+    isPrivate: {
+        type: Boolean,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);
