@@ -58,6 +58,42 @@ router.delete('/:id', async (req, res) => {
 });
 
 /* PATCH  a specific user */
-router.
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findOne({_id : id});
+
+    if (req.body.userName != null) {
+      res.user.userName = req.body.userName;
+    }
+    if (req.body.userFirstName != null) {
+      res.user.userFirstName = req.body.userFirstName;
+    }
+    if (req.body.userPseudo != null) {
+      res.user.userPseudo = req.body.userPseudo;
+    }
+    if (req.body.userMail != null) {
+      res.user.userMail = req.body.userMail;
+    }
+    if (req.body.userPassword != null) {
+      res.user.userPassword = req.body.userPassword;
+    }
+    if (req.body.isAdmin != null) {
+      res.user.isAdmin = req.body.isAdmin;
+    }
+    if (req.body.isPrivate != null) {
+      res.user.isPrivate = req.body.isPrivate;
+    }
+    if (req.body.isBan != null) {
+      res.user.isBan = req.body.isBan;
+    }
+
+    const updatedUser = await res.user.save();
+    await res.json(updatedUser);
+
+  } catch(err) {
+    await res.json({message: err});
+  }
+});
 
 module.exports = router;
