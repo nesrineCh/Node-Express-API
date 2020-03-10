@@ -31,7 +31,6 @@ const userSchema = mongoose.Schema({
     },
     isBan: {
         type: Boolean,
-        required: true
     }
 });
 

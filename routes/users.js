@@ -3,10 +3,27 @@ const router = express.Router();
 const User = require('../models/User');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', async (req, res) => {
+  try {
+    const users = await User.find();
+    await res.json(users);
+  } catch (err) {
+    await res.json({message: err});
+  }
 });
 
+/* GET a specific user */
+router.get('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await User.findOne({_id : id});
+    await res.json(user);
+  } catch (err) {
+    await res.json({message: err});
+  }
+});
+
+/* POST new users */
 router.post('/', async (req, res) => {
   console.log(req.body);
   const user = new User({
@@ -17,7 +34,7 @@ router.post('/', async (req, res) => {
     userPassword: req.body.userPassword,
     isAdmin: req.body.isAdmin,
     isPrivate: req.body.isPrivate,
-    isBan: req.body.isBan,
+    isBan: req.body.isBan
   });
 
   try{
@@ -27,14 +44,20 @@ router.post('/', async (req, res) => {
     await res.json({message: err});
   }
 
-  /*
-  user.save()
-  .then(data => {
-    res.json(data);
-  }).catch(err => {
-    res.json({err});
-  });
-  */
 });
+
+/* DELETE a specific user */
+router.delete('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const deletedUser = await User.deleteOne({_id : id});
+    await res.json(deletedUser);
+  } catch (err) {
+    await res.json({message: err});
+  }
+});
+
+/* PATCH  a specific user */
+router.
 
 module.exports = router;
