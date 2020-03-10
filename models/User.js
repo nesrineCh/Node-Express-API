@@ -5,6 +5,18 @@ const userSchema = mongoose.Schema({
         type : String,
         required: true
     },
+    userFirstName: {
+        type : String,
+        required: true
+    },
+    userPseudo: {
+        type : String,
+        required: true
+    },
+    userMail: {
+        type : String,
+        required: true
+    },
     userPassword: {
         type: String,
         required: true
@@ -14,6 +26,10 @@ const userSchema = mongoose.Schema({
         required: true
     },
     isPrivate: {
+        type: Boolean,
+        required: true
+    },
+    isBan: {
         type: Boolean,
         required: true
     }
