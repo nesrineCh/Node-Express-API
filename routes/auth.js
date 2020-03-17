@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
     //checking if user already exist
     try {
         const emailExist = await User.findOne({userMail : req.body.userMail});
-        if(emailExist) return res.status(400).send('Email already exists');
+        if(emailExist) return res.status(400).send('Email already exists.');
     } catch (err) {
         res.status(400).send(err);
     }
@@ -48,6 +48,22 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
+
+    //data validation
+    const {error} =  loginValidation(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+
+    //checking if email exists and if it's matching the password
+    try {
+        const user = await User.findOne({userMail : req.body.userMail});
+        if(!user) return res.status(400).send('Email or password is wrong. EE');
+        const validPassword = await bcrypt.compare(req.body.userPassword, user.userPassword);
+        if(!validPassword) return res.status(400).send('Email or password is wrong. PP');
+    } catch (err) {
+        res.status(400).send(err);
+    }
+
+    res.send('Logged in');
 
 });
 
