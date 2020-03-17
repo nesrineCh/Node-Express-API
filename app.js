@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/publications', publicationRouter);
+app.use('/comments', commentRouter);
 
 //connection to the database
 mongoose.connect(
