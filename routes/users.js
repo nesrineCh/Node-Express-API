@@ -25,7 +25,6 @@ router.get('/:id', async (req, res) => {
 
 /* POST new users */
 router.post('/', async (req, res) => {
-  console.log(req.body);
   const user = new User({
     userName: req.body.userName,
     userFirstName: req.body.userFirstName,
