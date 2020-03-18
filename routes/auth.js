@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const  {registerValidation} = require('../validation/register');
 const {loginValidation} = require('../validation/login');
 
 router.post('/register', async (req, res) => {
 
     //data validation
-    const {error} =  registerValidation(req.body);
+    const {error} =  await registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
     //checking if user already exist
@@ -22,8 +23,6 @@ router.post('/register', async (req, res) => {
     //hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.userPassword, salt);
-
-
 
     //user creation
     const user = new User({
@@ -50,20 +49,20 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
 
     //data validation
-    const {error} =  loginValidation(req.body);
+    const {error} =  await loginValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
 
-    //checking if email exists and if it's matching the password
-    try {
-        const user = await User.findOne({userMail : req.body.userMail});
-        if(!user) return res.status(400).send('Email or password is wrong. EE');
-        const validPassword = await bcrypt.compare(req.body.userPassword, user.userPassword);
-        if(!validPassword) return res.status(400).send('Email or password is wrong. PP');
-    } catch (err) {
-        res.status(400).send(err);
-    }
+    //checking if email exists
+    const user = await User.findOne({userMail : req.body.userMail});
+    if(!user) return res.status(400).send('Email or password is wrong.');
 
-    res.send('Logged in');
+    //if the passwords are matching
+    const validPassword = await bcrypt.compare(req.body.userPassword, user.userPassword);
+    if(!validPassword) return res.status(400).send('Email or password is wrong.');
+
+    //creation of the jwt
+    const token = jwt.sign({_id : user._id}, process.env.TOKEN_SECRET);
+    res.header('auth-token', token).send(token);
 
 });
 
