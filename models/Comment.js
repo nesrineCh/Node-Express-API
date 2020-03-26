@@ -27,6 +27,10 @@ const commentSchema = mongoose.Schema({
         type: mongoose.ObjectId,
         ref:'Category',
         required:true
+    },
+    isAnonymous: {
+        type: Boolean,
+        default: false
     }
 })
 
