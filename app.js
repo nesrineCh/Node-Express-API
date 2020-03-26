@@ -3,7 +3,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const jwt  = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 require('dotenv/config');
 
 const indexRouter = require('./routes/index');
@@ -15,7 +15,7 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -24,11 +24,15 @@ app.use('/users', usersRouter);
 app.use('/publications', publicationRouter);
 app.use('/', authRouter);
 
-//connection to the database
+app.use((rep, res) => {
+	res.status(404).send("route not found")
+});
+
+//initialize the connection to the database
 mongoose.connect(
-    process.env.DB_CONNECTION,
-    { useNewUrlParser: true},
-    ()=> console.log('Connected to DB')
+	process.env.DB_CONNECTION,
+	{useNewUrlParser: true, useUnifiedTopology: true},
+	() => console.log('Connected to DB')
 );
 
 
