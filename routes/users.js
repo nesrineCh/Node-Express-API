@@ -4,6 +4,7 @@ const User = require('../models/User');
 
 /* GET users listing. */
 router.get('/', async (req, res) => {
+	// get all users : admin ?
 	try {
 		const users = await User.find();
 		await res.json(users);
@@ -60,8 +61,6 @@ router.delete('/:id', async (req, res) => {
 router.patch('/:id', async (req, res) => {
 	try {
 		// try verify auth of the user (if req from that user or from admin)
-
-
 		const id = req.params.id;
 		const user = await User.findOne({_id: id});
 

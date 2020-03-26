@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 // const jwt = require('jsonwebtoken');
 require('dotenv/config');
 
-const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const publicationRouter = require('./routes/publications');
 const authRouter = require('./routes/auth');
@@ -17,9 +16,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/publications', publicationRouter);
 app.use('/', authRouter);

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const commentSchema = mongoose.Schema({
 	idParent: {
@@ -32,6 +32,6 @@ const commentSchema = mongoose.Schema({
         type: Boolean,
         default: false
     }
-})
+});
 
 module.exports = mongoose.model('Comment', commentSchema);

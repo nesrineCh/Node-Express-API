@@ -27,9 +27,9 @@ router.post('/', async (req, res, next) => {
 		commentDescription: req.body.commentDescription
 		//
 		//category
-	})
+	});
 	try {
-		const newComment = await comment.save()
+		const newComment = await comment.save();
 		res.status(201).json(comment)
 	} catch (err) {
 		res.status(400).json({message: err.message})
