@@ -6,17 +6,17 @@ const Publication = require('../models/Publication');
 router.get('/home', function (req, res) {
 	Publication.find()
 		.populate('publicationAuthor', 'userPseudo')
-		.exec().then(data => res.json(data))
+		.then(data => res.json(data))
 		.catch(err => res.status(500).send(err))
 });
 //limit and offset
-
 
 //Get a publication by id
 router.get('/:idPub', function (req, res) {
 	// Todo : get commentaires
 	Publication.findById(req.params.idPub)
-		.exec().then(data => res.status(200).json(data))
+		.populate('publicationAuthor', 'userPseudo')
+		.then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
 });
 

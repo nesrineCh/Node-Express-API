@@ -12,18 +12,16 @@ router.use('/comment', commentSignal);
 router.get('/', async function (req, res) {
 
 	if (!req.user.isAdmin) {
-		res.status(403).send()
+		return res.status(403).end()
 	}
 
 	try {
 
-		const listCommentSig = await CommentSignal.find().exec();
+		const res = await Promise.all([CommentSignal.find(), PubSignal.find()]);
 
-		const listPostSig = await PubSignal.find().exec();
-
-		res.status(200).send({listCommentSig, listPostSig})
+		res.status(200).send({listCommentSig: res[0], listPostSig: res[1]});
 	} catch (e) {
-		res.status(500).send({message: e})
+		res.status(500).send({message: e});
 	}
 });
 

@@ -5,7 +5,7 @@ module.exports = async function (req, res, next) {
 
 	//checking if user has a token
 	const token = req.header('auth-token');
-	if (!token) return res.status(401).send('Access Denied');
+	if (!token) return next();
 
 	//checking if token is valid
 	try {
@@ -17,5 +17,5 @@ module.exports = async function (req, res, next) {
 		req.user = null
 	}
 
-	next();
+	return next();
 };
