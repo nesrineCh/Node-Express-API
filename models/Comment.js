@@ -28,10 +28,10 @@ const commentSchema = mongoose.Schema({
 		ref: 'Category',
 		required: true
 	},
-    isAnonymous: {
-        type: Boolean,
-        default: false
-    }
+	isAnonymous: {
+		type: Boolean,
+		default: false
+	}
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

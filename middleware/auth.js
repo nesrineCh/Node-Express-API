@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
 
 	//checking if user has a token
 	const token = req.header('auth-token');
@@ -8,10 +9,13 @@ module.exports = function (req, res, next) {
 
 	//checking if token is valid
 	try {
-		const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-		req.user = verified;
-		next();
+		const {_id/*, iat*/} = jwt.verify(token, process.env.TOKEN_SECRET);
+
+		req.user = await User.findOne({_id})
+
 	} catch (err) {
-		res.status(400).send('Invalid Token');
+		req.user = null
 	}
+
+	next();
 };
