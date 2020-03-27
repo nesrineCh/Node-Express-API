@@ -12,7 +12,9 @@ const helmet = require('helmet');
 const usersRouter = require('./routes/users');
 const signalRouter = require('./routes/signal');
 const publicationRouter = require('./routes/publications');
-const authRouter = require('./routes/login');
+const loginRouter = require('./routes/login');
+const commentRouter = require('./routes/comments');
+const catRouter = require('./routes/category');
 
 const authMiddleware = require('./middleware/auth');
 
@@ -28,8 +30,9 @@ app.use(cookieParser());
 
 app.use(authMiddleware);
 
-app.use(authRouter);
-
+app.use(loginRouter);
+app.use('/category', catRouter);
+app.use('/comment', commentRouter);
 app.use('/users', usersRouter);
 app.use('/signal', signalRouter);
 app.use('/publications', publicationRouter);

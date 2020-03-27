@@ -17,11 +17,12 @@ router.get('/:commentId', function (req, res) {
 //Create a comment
 router.post('/', async (req, res) => {
 	const comment = new Comment({...req.body});
+
 	try {
 		const newComment = await comment.save();
 		res.status(201).json(newComment)
 	} catch (err) {
-		res.status(400).json({message: err.message})
+		res.status(500).json({error: err})
 	}
 });
 
