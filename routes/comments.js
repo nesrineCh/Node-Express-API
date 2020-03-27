@@ -3,47 +3,63 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 
 //Get all comments for a post
-router.get('/post/:pubId', function (req, res) {
+router.get('/:idPub/Comments', function (req, res) {
 	Comment
 		.find({commentParent: req.params.pubId})
-		.then(data => res.status(200).json(data))
+		.populate('commentAuthor', 'userPseudo')
+		.sort({'commentDate': -1})
+		.exec().then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
-});
+})
+
 
 //Get a comment by id
 router.get('/:commentId', function (req, res) {
-	Comment
-		.findById(req.params.commentId)
-		.then(data => res.status(200).json(data))
+	Comment.findById(req.params.commentId)
+		.populate('commentAuthor', 'userPseudo')
+		.exec().then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
-});
+})
+
 
 //Create a comment
-router.post('/', (req, res) => {
+router.post('/', async (req, res, next) => {
+	const comment = new Comment({...req.body})
+	try {
+		const newComment = await comment.save()
+		res.status(201).json(comment)
+	} catch (err) {
+		res.status(400).json({message: err.message})
+	}
+})
 
-	// Todo : validate ?
-	const comment = new Comment({...req.body});
+//Signaler un commentaires
+router.put('/:idUser/:commentId', function (req, res) {
+	//Comment.
+})
 
-	comment.save()
-		.then(data => res.status(200).json(data))
-		.catch(err => res.status(500).send(err))
 
-});
+//Notrer un commentaire (+1)
 
-//Delete a comment, Only admin and author of comment
+
+//Delete a comment for admin and author of comment
 router.delete('/:commentId', async function (req, res) {
-
 	let id = req.params.commentId;
 
-	const comment = await Comment.findById(id);
+	try {
+		const comment = await Comment.findById(id);
 
-	if (!req.user || (comment.commentAuthor !== req.user._id && !req.user.isAdmin)) {
-		return res.status(403).end()
+		if (!req.user || (comment.commentAuthor !== req.user._id && !req.user.isAdmin)) {
+			return res.status(403).end()
+		}
+
+		Comment.deleteOne({_id: id})
+			.exec().then(data => res.json(data))
+			.catch(err => res.status(500).send(err))
+
+	} catch (e) {
+		res.status(500).send(e)
 	}
-
-	Comment.remove({_id: id})
-		.then(data => res.status(200).json(data))
-		.catch(err => res.status(500).send(err))
-});
+})
 
 module.exports = router;
