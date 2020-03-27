@@ -19,10 +19,9 @@ const commentSchema = mongoose.Schema({
 		type: Date,
 		default: Date.now()
 	},
-	commentScore: {
-		type: Number,
-		default: 0
-	},
+	commentScore:
+		[{type: mongoose.ObjectId, ref: 'User'}]
+	,
 	category: {
 		type: mongoose.ObjectId,
 		ref: 'Category',
