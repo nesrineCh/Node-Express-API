@@ -3,25 +3,25 @@ const router = express.Router();
 const Comment = require('../models/Comment');
 
 //Get all comments for a post
-router.get('/:pubId', function (req, res) {
-    Comment.find({commentParent: req.params.pubId}).exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
+router.get('/:idPub/Comments', function (req, res) {
+    Comment.findById(req.params.pubId)
+        .populate('commentAuthor', 'userPseudo')
+        .sort({'commentDate': -1})
+        .exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
 })
 
 
 //Get a comment by id
 router.get('/:commentId', function (req, res) {
-    Comment.findById(req.params.commentId).exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
+    Comment.findById(req.params.commentId)
+        .populate('commentAuthor', 'userPseudo')
+        .exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
 })
 
 
 //Create a comment
-router.post('/', async (req, res, next) => {
-    const comment = new Comment({
-        //commentAuthor
-        commentDescription: req.body.commentDescription
-        //
-        //category
-    })
+router.post('/writeComment', async (req, res, next) => {
+    const comment = new Comment({...req.body})
     try{
         const newComment = await comment.save()
         res.status(201).json(comment)
@@ -30,10 +30,19 @@ router.post('/', async (req, res, next) => {
     }
 })
 
+//Signaler un commentaires
+router.put('/:idUser/:commentId',function (req, res) {
+    //Comment.
+})
+
+
+//Notrer un commentaire (+1)
+
 
 //Delete a comment for admin and author of comment
 router.delete('/:commentId', function (req, res) {
-    Comment.remove({_id: req.param.commentId}).exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
+    Comment.deleteOne({_id: req.params.commentId})
+        .exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
 })
 
 module.exports = router;

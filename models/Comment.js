@@ -31,7 +31,9 @@ const commentSchema = mongoose.Schema({
     isAnonymous: {
         type: Boolean,
         default: false
-    }
+    },
+    report:
+        [{type: mongoose.ObjectId, ref: 'User'}]
 })
 
 module.exports = mongoose.model('Comment', commentSchema);

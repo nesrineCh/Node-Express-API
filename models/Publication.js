@@ -29,7 +29,9 @@ const publicationSchema = mongoose.Schema({
     isAnonymous: {
         type: Boolean,
         default: false
-    }
-    });
+    },
+    report:
+        [{type: mongoose.ObjectId, ref: 'User'}]
+});
 
 module.exports = mongoose.model('Publication', publicationSchema);
