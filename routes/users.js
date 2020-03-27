@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Publication = require('../models/Publication');
 
 /* GET users listing. Only if admin*/
 router.get('/', async (req, res) => {
@@ -10,13 +11,13 @@ router.get('/', async (req, res) => {
 
 	try {
 		const users = await User.find();
-		return res.json(users);
+		return res.status(200).json(users);
 	} catch (err) {
-		return res.json({message: err});
+		return res.status(500).json({message: err});
 	}
 });
 
-/* GET a specific user. Only if admin */
+/* GET a specific user. Only if admin TODO : ou si on est cet user*/
 router.get('/:id', async (req, res) => {
 
 	if (!req.user || !req.user.isAdmin) {
@@ -26,10 +27,23 @@ router.get('/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const user = await User.findOne({_id: id});
-		return res.json(user);
+		return res.status(200).json(user);
 	} catch (err) {
-		return res.json({message: err});
+		return res.status(500).json({message: err});
 	}
+});
+
+//Get toutes les publications d'un utilisateur, TODO : si admin ou user
+router.get('/:idUser/pub', function (req, res) {
+
+	if (!req.user || !req.user.isAdmin) {
+		return res.status(403).send()
+	}
+
+	Publication.find({publicationAuthor: req.params.idUser})
+		.populate('publicationAuthor', 'userPseudo')
+		.then(data => res.status(200).json(data))
+		.catch(err => res.status(500).send(err))
 });
 
 /* POST new user. Only admin */
@@ -53,9 +67,10 @@ router.post('/', async (req, res) => {
 	try {
 		const savedUser = await user.save();
 
-		return res.json(savedUser);
+		return res.status(201).json(savedUser);
+
 	} catch (err) {
-		return res.json({message: err});
+		return res.status(500).json({message: err});
 	}
 
 });
@@ -74,9 +89,9 @@ router.delete('/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const deletedUser = await User.deleteOne({_id: id});
-		return res.json(deletedUser);
+		return res.status(200).json(deletedUser);
 	} catch (err) {
-		return res.json({message: err});
+		return res.status(500).json({message: err});
 	}
 });
 
@@ -122,7 +137,7 @@ router.patch('/:id', async (req, res) => {
 
 		}
 
-		await user.update(req.user);
+		await user.updateOne(req.user);
 
 		return res.status(200).end();
 

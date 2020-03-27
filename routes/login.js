@@ -40,10 +40,10 @@ router.post('/register', async (req, res) => {
 
 	//posting to db
 	try {
-		await user.save();
-		await res.json({user: user._id});
+		const user = await user.save();
+		res.status(200).json(user);
 	} catch (err) {
-		res.status(400).send(err);
+		res.status(500).send(err);
 	}
 
 });

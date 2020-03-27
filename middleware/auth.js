@@ -5,16 +5,19 @@ module.exports = async function (req, res, next) {
 
 	//checking if user has a token
 	const token = req.header('auth-token');
-	if (!token) return next();
 
-	//checking if token is valid
-	try {
-		const {_id/*, iat*/} = jwt.verify(token, process.env.TOKEN_SECRET);
+	if (token) {
 
-		req.user = await User.findOne({_id})
+		//checking if token is valid
+		try {
+			const {_id/*, iat*/} = jwt.verify(token, process.env.TOKEN_SECRET);
 
-	} catch (err) {
-		req.user = null
+			req.user = await User.findOne({_id})
+
+		} catch (err) {
+			req.user = null
+		}
+
 	}
 
 	return next();

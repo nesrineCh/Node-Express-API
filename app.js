@@ -34,7 +34,7 @@ app.use('/signal', signalRouter);
 app.use('/publications', publicationRouter);
 
 app.use((rep, res) => {
-	res.status(404).json({error : "route does not exist"})
+	res.status(404).json({error: "route does not exist"})
 });
 
 //initialize the connection to the database

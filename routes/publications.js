@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Publication = require('../models/Publication');
+const Comment = require('../models/Comment');
 
 //Get toutes les publications pour la page d'accueil
 //Get publications list TODO : limit and offset
@@ -22,43 +23,54 @@ router.get('/:idPub', function (req, res) {
 
 //Create a publication
 router.post('/', function (req, res) {
-	// console.log(req.body);
-
-	// Todo : validate ?
 	const publication = new Publication({...req.body});
 
 	publication.save()
-		.then(data => res.status(200).json(data))
+		.then(data => res.status(201).json(data))
 		.catch(err => res.status(500).json({err}));
-
 });
 
 
-//Delete a publication, for admin and author of the publication
+//Delete a publication, TODO : for admin and author of the publication
 router.delete('/:idPub', function (req, res) {
-    Publication.remove({_id: req.params.idPub})
-        .exec().then(data => {
-        Comments.deleteMany({idParent: req.params.idPub}).exec()
-        res.json(data)})
-        .catch(err => res.status(500).send(err))
-})
 
-//Get toutes les publications d'un utilisateur
-router.get('/:idUser', function (req, res) {
-    Publication.findById(req.params.idUser)
-        .populate('publicationAuthor','userPseudo')
-        .exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
-})
+	if (!req.user || !req.user.isAdmin) {
+		return res.status(403).send()
+	}
 
-//Update une publication
+	Publication.findByIdAndRemove(req.params.idPub)
+		.then(data =>
+			Comments.deleteMany({idParent: req.params.idPub})
+				.then(_ => res.status(200).json(data))
+				.catch(err => res.status(500).json(err))
+		)
+		.catch(err => res.status(500).send(err))
+});
+
+//Get toutes les publications d'un utilisateur, si admin : dans user/:idUser/pub
+
+//Get all comments for a publication
+router.get('/:idPub/comments', function (req, res) {
+	Comment
+		.find({commentParent: req.params.pubId})
+		.populate('commentAuthor', 'userPseudo') // Todo : populate correctly
+		.sort({'commentDate': -1})
+		.then(data => res.status(200).json(data))
+		.catch(err => res.status(500).send(err))
+});
+
+//Update une publication, si admin
 router.patch('/:idPub', function (req, res) {
-    Publication.updateOne({_id: req.params.idPub}, {$set: {...req.body}})
-        .exec().then(data => res.json(data)).catch(err => res.status(500).send(err))
-})
 
-//Signaler une publication
-router.put('/:idUser/:idPub', function (req, res) {
-    //Publication.
-})
+	if (!req.user || !req.user.isAdmin) {
+		return res.status(403).send()
+	}
+
+	Publication.updateOne({_id: req.params.idPub}, {$set: {...req.body}})
+		.then(data => res.status(200).json(data))
+		.catch(err => res.status(500).send(err))
+});
+
+//Signaler une publication : dans signal/pub/:id
 
 module.exports = router;
