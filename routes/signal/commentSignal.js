@@ -10,8 +10,8 @@ router.put('/:idCom', function (req, res) {
 					.then(data => res.status(201).json(data))
 					.catch(err => res.status(500).json(err))
 			} else {
-        res.status(500).end()
-      }
+                res.status(500).end()
+            }
 		}
 	)
 		.catch(err => res.status(500).json(err))
