@@ -18,10 +18,8 @@ const publicationSchema = mongoose.Schema({
 		type: Date,
 		default: Date.now()
 	},
-	publicationScore: {
-		type: Number,
-		default: 0
-	},
+	publicationScore:
+		[{type: mongoose.ObjectId, ref: 'User'}],
 	isDiscussion: {
 		type: Boolean,
 		required: true
