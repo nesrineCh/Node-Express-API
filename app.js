@@ -29,6 +29,7 @@ app.use(cookieParser());
 app.use(authMiddleware);
 
 app.use(authRouter);
+
 app.use('/users', usersRouter);
 app.use('/signal', signalRouter);
 app.use('/publications', publicationRouter);

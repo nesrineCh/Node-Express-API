@@ -20,7 +20,7 @@ const publicationSchema = mongoose.Schema({
 	},
 	publicationScore: {
 		type: Number,
-		required: true
+		default: 0
 	},
 	isDiscussion: {
 		type: Boolean,
@@ -30,7 +30,7 @@ const publicationSchema = mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-	report:
+	reports:
 		[{type: mongoose.ObjectId, ref: 'User'}]
 });
 

@@ -32,8 +32,8 @@ const commentSchema = mongoose.Schema({
 		type: Boolean,
 		default: false
 	},
-    report:
-        [{type: mongoose.ObjectId, ref: 'User'}]
+	reports:
+		[{type: mongoose.ObjectId, ref: 'User'}]
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

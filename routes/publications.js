@@ -21,7 +21,7 @@ router.get('/:idPub', function (req, res) {
 		.catch(err => res.status(500).send(err))
 });
 
-//Create a publication
+//Create a publication, TODO : si on est logged in
 router.post('/', function (req, res) {
 	const publication = new Publication({...req.body});
 
@@ -40,9 +40,9 @@ router.delete('/:idPub', function (req, res) {
 
 	Publication.findByIdAndRemove(req.params.idPub)
 		.then(data =>
-			Comments.deleteMany({idParent: req.params.idPub})
+			Comment.deleteMany({idParent: req.params.idPub})
 				.then(_ => res.status(200).json(data))
-				.catch(err => res.status(500).json(err))
+				.catch(err => res.status(501).json(err))
 		)
 		.catch(err => res.status(500).send(err))
 });
@@ -51,12 +51,14 @@ router.delete('/:idPub', function (req, res) {
 
 //Get all comments for a publication
 router.get('/:idPub/comments', function (req, res) {
+
 	Comment
 		.find({commentParent: req.params.pubId})
-		.populate('commentAuthor', 'userPseudo') // Todo : populate correctly
+		.populate('commentAuthor', 'userPseudo') // Todo : populate correctly ?
 		.sort({'commentDate': -1})
 		.then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
+
 });
 
 //Update une publication, si admin

@@ -5,6 +5,7 @@ const Publication = require('../models/Publication');
 
 /* GET users listing. Only if admin*/
 router.get('/', async (req, res) => {
+
 	if (!req.user || !req.user.isAdmin) {
 		return res.status(403).send()
 	}
