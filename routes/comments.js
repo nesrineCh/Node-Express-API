@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 //Signaler un commentaires : dans signal/comment/:idComment
 
 
-//Noter un commentaire (+1)
+// TODO : Noter un commentaire (+1)
 
 
 //Delete a comment for admin and author of comment

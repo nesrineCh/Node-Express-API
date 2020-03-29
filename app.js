@@ -2,6 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+var cors = require('cors')
+
+
 require('dotenv/config');
 
 // const path = require('path');
@@ -23,6 +26,8 @@ const app = express();
 app.use(helmet());
 
 app.use(logger('dev'));
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

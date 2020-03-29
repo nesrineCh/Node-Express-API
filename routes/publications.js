@@ -49,6 +49,8 @@ router.delete('/:idPub', function (req, res) {
 
 //Get toutes les publications d'un utilisateur, si admin : dans user/:idUser/pub
 
+// TODO : Noter une publication (+1)
+
 //Get all comments for a publication
 router.get('/:idPub/comments', function (req, res) {
 
