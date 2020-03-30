@@ -29,14 +29,15 @@ const userSchema = mongoose.Schema({
 	},
 	isAdmin: {
 		type: Boolean,
-		required: true
+		default: false
 	},
 	isPrivate: {
 		type: Boolean,
-		required: true
+		default: false
 	},
 	isBan: {
 		type: Boolean,
+		default: false
 	}
 });
 
