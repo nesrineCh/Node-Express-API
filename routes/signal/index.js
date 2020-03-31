@@ -12,7 +12,7 @@ router.use('/comment', commentSignal);
 
 router.get('/', async function (req, res) {
 
-	if (!req.user.isAdmin) {
+	if (!req.user || !req.user.isAdmin) {
 		return res.status(403).end()
 	}
 
