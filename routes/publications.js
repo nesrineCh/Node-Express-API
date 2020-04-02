@@ -61,7 +61,6 @@ router.get('/:idPub/comments', function (req, res) {
 
 	Comment
 		.find({commentParent: req.params.pubId})
-		.populate('commentAuthor', 'userPseudo') // Todo : populate correctly ?
 		.sort({'commentDate': -1})
 		.then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
