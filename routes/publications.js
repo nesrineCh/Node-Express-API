@@ -7,7 +7,6 @@ const Comment = require('../models/Comment');
 //Get publications list TODO : limit and offset
 router.get('/', function (req, res) {
 	Publication.find()
-		.populate('publicationAuthor', 'userPseudo')
 		.then(data => res.json(data))
 		.catch(err => res.status(500).send(err))
 });
@@ -16,7 +15,6 @@ router.get('/', function (req, res) {
 router.get('/:idPub', function (req, res) {
 	// Todo : get commentaires
 	Publication.findById(req.params.idPub)
-		.populate('publicationAuthor', 'userPseudo')
 		.then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
 });
