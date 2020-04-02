@@ -8,7 +8,7 @@ const Comment = require('../models/Comment');
 //Get a comment by id
 router.get('/:commentId', function (req, res) {
 	Comment.findById(req.params.commentId)
-		.exec().then(data => res.status(200).json(data))
+		.then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
 });
 
@@ -42,7 +42,7 @@ router.delete('/:commentId', async function (req, res) {
 			return res.status(403).end()
 		}
 
-		Comment.deleteOne({_id: id})
+		Comment.findByIdAndRemove(id)
 			.then(data => res.status(200).json(data))
 			.catch(err => res.status(500).send(err))
 
