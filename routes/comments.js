@@ -8,7 +8,6 @@ const Comment = require('../models/Comment');
 //Get a comment by id
 router.get('/:commentId', function (req, res) {
 	Comment.findById(req.params.commentId)
-		.populate('commentAuthor', 'userPseudo')
 		.exec().then(data => res.status(200).json(data))
 		.catch(err => res.status(500).send(err))
 });

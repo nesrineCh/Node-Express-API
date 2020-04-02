@@ -21,7 +21,6 @@ router.get('/', async (req, res) => {
 /* GET a specific user. */
 router.get('/:id', async (req, res) => {
 
-
 	try {
 		const id = req.params.id;
 		const user = await User.findOne({_id: id});
