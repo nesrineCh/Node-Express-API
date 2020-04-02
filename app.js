@@ -25,7 +25,7 @@ const app = express();
 
 app.use(helmet());
 
-app.use(logger('dev'));
+app.use(logger('dev')); // Todo : remove in prod
 
 app.use(cors());
 

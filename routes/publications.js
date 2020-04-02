@@ -32,11 +32,18 @@ router.post('/', function (req, res) {
 
 
 //Delete a publication, TODO : for admin and author of the publication
-router.delete('/:idPub', function (req, res) {
+router.delete('/:idPub', async function (req, res) {
 
-	if (!req.user || !req.user.isAdmin) {
-		return res.status(403).send()
+	let pub = await Publication.findById(req.params.idPub)
+
+	if(!pub){
+		return res.status(403).end()
 	}
+
+	if (!req.user || (!req.user.isAdmin && (req.user._id === pub.publicationAuthor))) {
+		return res.status(403).end()
+	}
+
 
 	Publication.findByIdAndRemove(req.params.idPub)
 		.then(data =>
