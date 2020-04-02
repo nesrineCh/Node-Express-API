@@ -18,12 +18,9 @@ router.get('/', async (req, res) => {
 	}
 });
 
-/* GET a specific user. Only if admin TODO : ou si on est cet user*/
+/* GET a specific user. */
 router.get('/:id', async (req, res) => {
 
-	if (!req.user || !req.user.isAdmin) {
-		return res.status(403).send()
-	}
 
 	try {
 		const id = req.params.id;
